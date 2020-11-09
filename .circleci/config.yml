@@ -29,4 +29,5 @@ jobs:
     executor: << parameters.os >>
     steps:
       - run: go get github.com/rancher/dapper
+      - checkout
       - run: dapper ci
