@@ -1,0 +1,32 @@
+version: 2.1
+
+executors:
+  dapper:
+    docker:
+      - image: rancher/dapper:v0.5.2
+        # this image will probably need more installed, i.e. bash
+  ubuntu-1604:
+    machine:
+      image: ubuntu-1604:202010-01
+  ubuntu-2004:
+    machine:
+      image: ubuntu-2004:202010-01
+
+workflows:
+  default:
+    jobs:
+      - sample:
+          filters:
+            branches:
+              only: master
+
+jobs:
+  sample:
+    parameters:
+      os:
+        type: executor
+        default: ubuntu-1604
+    executor: << parameters.os >>
+    steps:
+      - run: go get github.com/rancher/dapper
+      - run: dapper ci
