@@ -4,6 +4,9 @@ executors:
   dapper:
     docker:
       - image: rancher/dapper:v0.5.2
+  go:
+    docker:
+      - image: cimg/go:1.15
         # this image will probably need more installed, i.e. bash
   ubuntu-1604:
     machine:
@@ -25,9 +28,12 @@ jobs:
     parameters:
       os:
         type: executor
-        default: ubuntu-1604
+        # default: ubuntu-1604
+        default: go
     executor: << parameters.os >>
     steps:
       - run: go get github.com/rancher/dapper
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: false
       - run: dapper ci
